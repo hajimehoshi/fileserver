@@ -26,7 +26,8 @@ var (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
-	http.ServeFile(w, r, ".")
+	// Don't use http.ServeFile due to directory traversal attack.
+	http.FileServer(http.Dir(".")).ServeHTTP(w, r)
 }
 
 func main() {
